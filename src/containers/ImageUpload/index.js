@@ -13,6 +13,7 @@ import {
   Image,
   Platform,
   PermissionsAndroid,
+  ScrollView,
 } from 'react-native';
 
 // Import Image Picker
@@ -75,7 +76,7 @@ const ImageUpload = () => {
     let isStoragePermitted = await requestExternalWritePermission();
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, response => {
-        console.log('Response = ', response.assets[0]);
+        console.log('Response = ', response);
 
         if (response.didCancel) {
           alert('User cancelled camera picker');
@@ -90,14 +91,14 @@ const ImageUpload = () => {
           alert(response.errorMessage);
           return;
         }
-        console.log('base64 -> ', response.base64);
-        console.log('uri -> ', response.uri);
-        console.log('width -> ', response.width);
-        console.log('height -> ', response.height);
-        console.log('fileSize -> ', response.fileSize);
-        console.log('type -> ', response.type);
-        console.log('fileName -> ', response.fileName);
-        setFilePath(response);
+        console.log('base64 -> ', response.assets[0].base64);
+        console.log('uri -> ', response.assets[0].uri);
+        console.log('width -> ', response.assets[0].width);
+        console.log('height -> ', response.assets[0].height);
+        console.log('fileSize -> ', response.assets[0].fileSize);
+        console.log('type -> ', response.assets[0].type);
+        console.log('fileName -> ', response.assets[0].fileName);
+        setFilePath(response.assets[0]);
       });
     }
   };
@@ -125,56 +126,58 @@ const ImageUpload = () => {
         alert(response.errorMessage);
         return;
       }
-      console.log('base64 -> ', response.base64);
-      console.log('uri -> ', response.uri);
-      console.log('width -> ', response.width);
-      console.log('height -> ', response.height);
-      console.log('fileSize -> ', response.fileSize);
-      console.log('type -> ', response.type);
-      console.log('fileName -> ', response.fileName);
-      setFilePath(response);
+      console.log('base64 -> ', response.assets[0].base64);
+      console.log('uri -> ', response.assets[0].uri);
+      console.log('width -> ', response.assets[0].width);
+      console.log('height -> ', response.assets[0].height);
+      console.log('fileSize -> ', response.assets[0].fileSize);
+      console.log('type -> ', response.assets[0].type);
+      console.log('fileName -> ', response.assets[0].fileName);
+      setFilePath(response.assets[0]);
     });
   };
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Text style={styles.titleText}>
-        Example of Image Picker in React Native
-      </Text>
-      <View style={styles.container}>
-        {/* <Image
+      <ScrollView>
+        <Text style={styles.titleText}>
+          Example of Image Picker in React Native
+        </Text>
+        <View style={styles.container}>
+          {/* <Image
           source={{
             uri: 'data:image/jpeg;base64,' + filePath.data,
           }}
           style={styles.imageStyle}
         /> */}
-        <Image source={{uri: filePath.uri}} style={styles.imageStyle} />
-        <Text style={styles.textStyle}>{filePath.uri}</Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => captureImage('photo')}>
-          <Text style={styles.textStyle}>Launch Camera for Image</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => captureImage('video')}>
-          <Text style={styles.textStyle}>Launch Camera for Video</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => chooseFile('photo')}>
-          <Text style={styles.textStyle}>Choose Image</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.buttonStyle}
-          onPress={() => chooseFile('video')}>
-          <Text style={styles.textStyle}>Choose Video</Text>
-        </TouchableOpacity>
-      </View>
+          <Image source={{uri: filePath.uri}} style={styles.imageStyle} />
+          <Text style={styles.textStyle}>{filePath.uri}</Text>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.buttonStyle}
+            onPress={() => captureImage('photo')}>
+            <Text style={styles.textStyle}>Launch Camera for Image</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.buttonStyle}
+            onPress={() => captureImage('video')}>
+            <Text style={styles.textStyle}>Launch Camera for Video</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.buttonStyle}
+            onPress={() => chooseFile('photo')}>
+            <Text style={styles.textStyle}>Choose Image</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={styles.buttonStyle}
+            onPress={() => chooseFile('video')}>
+            <Text style={styles.textStyle}>Choose Video</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
