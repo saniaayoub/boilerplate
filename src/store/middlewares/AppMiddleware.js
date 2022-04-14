@@ -17,7 +17,7 @@ export default class AppMiddleware {
           yield put(AppAction.SignInSuccess(user));
           AsyncStorage.setItem('user', res);
           replace('Home');
-          console.log('%cSignIn Response', 'color: green', ' => ', res);
+          // console.log('%cSignIn Response', 'color: green', ' => ', res);
         } else {
           Alert.alert('', 'Error: incorrect credentials');
           yield put(AppAction.SignInFailure());
@@ -47,7 +47,7 @@ export default class AppMiddleware {
     try {
       let res = yield ApiCaller.Post(Constants.ENDPOINTS.POST, payload);
       if (res.status == 201) {
-        console.log('%cAddPost Response', 'color: green', ' => ', res);
+        // console.log('%cAddPost Response', 'color: green', ' => ', res);
         res.data['id'] = new Date().getTime();
         yield put(AppAction.AddPostSuccess(res.data));
         NavigationService.goBack();
@@ -64,9 +64,9 @@ export default class AppMiddleware {
   static *GetPosts() {
     try {
       let res = yield ApiCaller.Get(Constants.ENDPOINTS.POST);
-      console.log(res);
+      // console.log(res);
       if (res.status == 200) {
-        console.log('%cGetPosts Response', 'color: green', ' => ', res);
+        // console.log('%cGetPosts Response', 'color: green', ' => ', res);
         yield put(AppAction.GetPostsSuccess(res.data));
       } else {
         console.log('%cGetPosts Response', 'color: red', ' => ', res);
