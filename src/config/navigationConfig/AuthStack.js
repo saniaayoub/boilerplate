@@ -1,4 +1,4 @@
-import {SignIn, Splash} from '../../containers';
+import {SignIn, Splash, SignUp} from '../../containers';
 
 export const AuthStack = [
   {
@@ -10,5 +10,10 @@ export const AuthStack = [
     name: 'SignIn',
     component: SignIn,
     key: 'SignIn',
+  },
+  {
+    name: 'SignUp',
+    component: SignUp,
+    key: 'SignUp',
   },
 ];

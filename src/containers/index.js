@@ -3,4 +3,5 @@ import SignIn from './SignIn';
 import Home from './Home';
 import AddPost from './AddPost';
 import ImageUpload from './ImageUpload';
-export {Splash, SignIn, Home, AddPost, ImageUpload};
+import SignUp from './SignUp';
+export {Splash, SignIn, Home, AddPost, ImageUpload, SignUp};

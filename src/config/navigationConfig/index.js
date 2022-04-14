@@ -7,15 +7,15 @@ import {useSelector} from 'react-redux';
 export const MainStackNavigator = () => {
   const MainStackNavigator = createNativeStackNavigator();
   const AppStacks = [...AuthStack, ...HomeStack];
-  const user = useSelector(state => state.AppReducer.user);
+  // const user = useSelector(state => state.AppReducer.user);
 
   useEffect(() => {
-    console.log('user data', user);
+    // console.log('user data', user);
   }, []);
 
   return (
     <MainStackNavigator.Navigator
-      initialRouteName={user.email ? 'Home' : 'Splash'}
+      initialRouteName="Splash"
       screenOptions={{
         headerShown: false,
       }}>

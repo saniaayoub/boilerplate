@@ -2,6 +2,9 @@ import {
   SIGNIN,
   SIGNIN_SUCCESS,
   SIGNIN_FAILURE,
+  SIGNUP,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILURE,
   ADD_POST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
@@ -37,6 +40,24 @@ export default function AppReducer(state = initialState, action) {
       };
       break;
     case SIGNIN_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case SIGNUP:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case SIGNUP_SUCCESS:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case SIGNUP_FAILURE:
       state = {
         ...state,
         loader: false,

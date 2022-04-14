@@ -5,44 +5,65 @@ import {Button, Forminput} from '../../components';
 import {Metrix, Images, Utils, Constants} from '../../config';
 import {AppAction} from '../../store/actions';
 import styles from './styles';
-import {NavigationService} from '../../config';
 
-class SignIn extends Component {
+class SignUp extends Component {
   state = {
     email: '',
     password: '',
+    username: '',
     emailErrMsg: '',
     passErrMsg: '',
+    userErrMsg: '',
     validEmail: true,
     validPass: true,
+    validUser: true,
   };
 
-  signin = () => {
-    const {email, password, validEmail, validPass} = this.state;
-    const {signin} = this.props;
+  signUp = () => {
+    const {
+      email,
+      password,
+      username,
+      validEmail,
+      validUser,
+      validPass,
+    } = this.state;
+    const {signUp} = this.props;
+    console.log('email', email);
     if (!email) this.setState({emailErrMsg: 'Email is a required field'});
+    if (!username) this.setState({userErrMsg: 'Username is a required field'});
     if (!password) this.setState({passErrMsg: 'Password is a required field'});
     else if (!validEmail)
       this.setState({emailErrMsg: 'Please enter valid email address.'});
+    else if (!validUser)
+      this.setState({userErrMsg: 'Please enter valid username'});
     else if (!validPass) this.setState({passErrMsg: 'Password is not valid'});
-    else signin({email, password});
+    else signUp({email, username, password});
   };
 
   validateEmail = email => {
     let validEmail = Utils.isEmailValid(email);
     this.setState({email, validEmail, emailErrMsg: ''});
   };
+  validateUsername = username => {
+    let validUser = Utils.isFullNameValid(username);
+    this.setState({username, validUser, userErrMsg: ''});
+  };
 
   validatePass = password => {
     let validPass = Utils.isPasswordValid(password);
     this.setState({password, validPass, passErrMsg: ''});
   };
-  signUp = () => {
-    const {navigate} = NavigationService;
-    navigate('SignUp');
-  };
+
   render() {
-    const {email, password, emailErrMsg, passErrMsg} = this.state;
+    const {
+      email,
+      password,
+      username,
+      userErrMsg,
+      emailErrMsg,
+      passErrMsg,
+    } = this.state;
     return (
       <View style={styles.container}>
         <ScrollView
@@ -56,7 +77,7 @@ class SignIn extends Component {
               style={styles.image}
               resizeMode="contain"
             />
-            <Text style={styles.headingStyle}>Login</Text>
+            <Text style={styles.headingStyle}>Sign Up</Text>
             <Forminput.TextField
               placeholder="Email"
               keyboardType="email-address"
@@ -68,6 +89,22 @@ class SignIn extends Component {
               blurOnSubmit={false}
               containerStyle={{marginTop: Metrix.VerticalSize(25)}}
               onSubmitEditing={() => {
+                this.userInputRef.focus();
+              }}
+            />
+            <Forminput.TextField
+              placeholder="Username"
+              returnKeyType="next"
+              autoCapitalize="none"
+              onChangeText={this.validateUsername}
+              errMsg={userErrMsg}
+              value={username}
+              blurOnSubmit={false}
+              reference={ref => {
+                this.userInputRef = ref;
+              }}
+              containerStyle={{marginTop: Metrix.VerticalSize(15)}}
+              onSubmitEditing={() => {
                 this.passInputRef.focus();
               }}
             />
@@ -76,39 +113,23 @@ class SignIn extends Component {
               placeholder="Password"
               secureTextEntry
               autoCapitalize="none"
-              returnKeyType="done"
               onChangeText={this.validatePass}
               errMsg={passErrMsg}
               value={password}
-              containerStyle={{marginTop: Metrix.VerticalSize(15)}}
               reference={ref => {
                 this.passInputRef = ref;
               }}
-              onSubmitEditing={this.signin}
+              containerStyle={{marginTop: Metrix.VerticalSize(15)}}
+              onSubmitEditing={this.signUp}
             />
-
-            <Text
-              style={styles.forgetPassText}
-              onPress={() => {
-                Alert.alert(Constants.TempUser.email, Constants.TempUser.pass);
-              }}>
-              Forgot Password?
-            </Text>
 
             <Button.Standard
-              text="Sign In"
+              text="Create Account"
               isLoading={this.props.loading}
               disabled={this.props.loading}
-              onPress={this.signin}
+              onPress={() => this.signUp()}
               containerStyle={{marginTop: Metrix.VerticalSize(35)}}
             />
-            <Text
-              style={styles.forgetPassText}
-              onPress={() => {
-                this.signUp();
-              }}>
-              Don't Have an account? Sign Up
-            </Text>
           </View>
         </ScrollView>
       </View>
@@ -118,8 +139,8 @@ class SignIn extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    signin: payload => {
-      dispatch(AppAction.SignIn(payload));
+    signUp: payload => {
+      dispatch(AppAction.SignUp(payload));
     },
   };
 }
@@ -130,4 +151,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

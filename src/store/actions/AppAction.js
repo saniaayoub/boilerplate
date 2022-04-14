@@ -2,6 +2,9 @@ import {
   SIGNIN,
   SIGNIN_SUCCESS,
   SIGNIN_FAILURE,
+  SIGNUP,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILURE,
   LOGOUT,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -31,6 +34,23 @@ export default class AppAction {
   static SignInFailure() {
     return {
       type: SIGNIN_FAILURE,
+    };
+  }
+  static SignUp(payload) {
+    return {
+      type: SIGNUP,
+      payload,
+    };
+  }
+  static SignUpSuccess(payload) {
+    return {
+      type: SIGNUP_SUCCESS,
+      payload,
+    };
+  }
+  static SignUpFailure() {
+    return {
+      type: SIGNUP_FAILURE,
     };
   }
 
