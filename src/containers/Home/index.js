@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {Button, Header} from '../../components';
 import {AppAction} from '../../store/actions';
 import styles from './styles';
+import {Metrix} from '../../config';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const RenderItem = ({item}) => {
   return (
@@ -49,8 +51,24 @@ class Home extends Component {
           contentContainerStyle={styles.listContentContainerStyle}
         />
         <Button.FloatingButton
+          customStyle={{
+            position: 'absolute',
+            bottom: Metrix.VerticalSize(125),
+            right: Metrix.HorizontalSize(20),
+          }}
           onPress={() => {
             this.props.navigation.navigate('AddPost');
+          }}
+        />
+        <Button.FloatingButton
+          customStyle={{
+            position: 'absolute',
+            bottom: Metrix.VerticalSize(40),
+            right: Metrix.HorizontalSize(20),
+          }}
+          iconComp={<Icon name="user" color="white" size={18} />}
+          onPress={() => {
+            this.props.navigation.navigate('Profile');
           }}
         />
       </View>

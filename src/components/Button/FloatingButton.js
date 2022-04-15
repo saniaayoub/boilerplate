@@ -10,7 +10,7 @@ const FloatingButton = props => {
       <TouchableOpacity
         activeOpacity={Metrix.ActiveOpacity}
         {...props}
-        style={styles.floatingButtonView}>
+        style={[props.customStyle, styles.floatingButtonView]}>
         {props.iconComp || <Icon name="plus" color={Colors.Text} size={18} />}
       </TouchableOpacity>
     </>

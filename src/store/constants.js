@@ -18,5 +18,9 @@ export const GET_POSTS = 'GET_POSTS';
 export const GET_POSTS_SUCCESS = 'GET_POSTS_SUCCESS';
 export const GET_POSTS_FAILURE = 'GET_POSTS_FAILURE';
 
+export const SAVE_INFO = 'SAVE_INFO';
+export const SAVE_INFO_SUCCESS = 'SAVE_INFO_SUCCESS';
+export const SAVE_INFO_FAILURE = 'SAVE_INFO_FAILURE';
+
 export const LOADER_TRUE = 'LOADER_TRUE';
 export const LOADER_FALSE = 'LOADER_FALSE';

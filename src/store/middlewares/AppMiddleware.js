@@ -5,6 +5,7 @@ import {NavigationService, ApiCaller, Constants} from '../../config';
 import {put} from 'redux-saga/effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export default class AppMiddleware {
   static *SignIn({payload}) {
@@ -16,7 +17,6 @@ export default class AppMiddleware {
       if (response.user) {
         yield put(AppAction.SignInSuccess(response.user));
         AsyncStorage.setItem('user', JSON.stringify(response.user));
-        Alert.alert('Success', 'Authenticated successfully');
         replace('Home');
       } else {
         yield put(AppAction.SignInFailure());
@@ -100,5 +100,29 @@ export default class AppMiddleware {
       yield put(AppAction.GetPostsFailure());
       console.log(`%c${err.name}`, 'color: red', ' => ', err);
     }
+  }
+  static *SaveInfo({payload}) {
+    const {name, email, address, phone, state, country, image} = payload;
+    console.log(payload);
+    try {
+      const usersCollection = yield firestore().collection('Users');
+      const response = yield usersCollection.add({
+        name: name,
+        email: email,
+        address: address,
+        phoneno: phone,
+        state: state,
+        country: country,
+        image: null,
+      });
+      if (response) {
+        console.log(response, 'response');
+        yield put(AppAction.SaveInfoSuccess(JSON.parse(response)));
+        alert('info inserted');
+      } else {
+        yield put(AppAction.SaveInfoFailure());
+        console.log('Not Inserted');
+      }
+    } catch (e) {}
   }
 }

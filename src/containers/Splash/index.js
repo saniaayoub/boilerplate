@@ -15,6 +15,7 @@ class Splash extends Component {
     setTimeout(() => {
       AsyncStorage.getItem('user').then(user => {
         if (user) {
+          console.log('user', user);
           const parsedData = JSON.parse(user);
           this.props.SignInSuccess(parsedData);
           NavigationService.replace('Home');

@@ -29,7 +29,6 @@ class SignUp extends Component {
       validPass,
     } = this.state;
     const {signUp} = this.props;
-    console.log('email', email);
     if (!email) this.setState({emailErrMsg: 'Email is a required field'});
     if (!username) this.setState({userErrMsg: 'Username is a required field'});
     if (!password) this.setState({passErrMsg: 'Password is a required field'});

@@ -5,6 +5,9 @@ import {
   SIGNUP,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE,
+  SAVE_INFO,
+  SAVE_INFO_SUCCESS,
+  SAVE_INFO_FAILURE,
   LOGOUT,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -51,6 +54,23 @@ export default class AppAction {
   static SignUpFailure() {
     return {
       type: SIGNUP_FAILURE,
+    };
+  }
+  static SaveInfo(payload) {
+    return {
+      type: SAVE_INFO,
+      payload,
+    };
+  }
+  static SaveInfoSuccess(payload) {
+    return {
+      type: SAVE_INFO_SUCCESS,
+      payload,
+    };
+  }
+  static SaveInfoFailure() {
+    return {
+      type: SAVE_INFO_FAILURE,
     };
   }
 
