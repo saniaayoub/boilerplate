@@ -17,6 +17,9 @@ import {
   GET_POSTS,
   GET_POSTS_SUCCESS,
   GET_POSTS_FAILURE,
+  GET_INFO,
+  GET_INFO_SUCCESS,
+  GET_INFO_FAILURE,
   LOADER_FALSE,
   LOADER_TRUE,
 } from '../constants';
@@ -73,6 +76,23 @@ export default class AppAction {
       type: SAVE_INFO_FAILURE,
     };
   }
+  static GetInfo(payload) {
+    return {
+      type: GET_INFO,
+      payload,
+    };
+  }
+  static GetInfoSuccess(payload) {
+    return {
+      type: GET_INFO_SUCCESS,
+      payload,
+    };
+  }
+  static GetInfoFailure() {
+    return {
+      type: GET_INFO_FAILURE,
+    };
+  }
 
   static Logout() {
     return {
@@ -107,7 +127,6 @@ export default class AppAction {
       type: ADD_POST_FAILURE,
     };
   }
-
   static GetPosts() {
     return {
       type: GET_POSTS,

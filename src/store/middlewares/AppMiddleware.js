@@ -90,7 +90,7 @@ export default class AppMiddleware {
       let res = yield ApiCaller.Get(Constants.ENDPOINTS.POST);
       // console.log(res);
       if (res.status == 200) {
-        // console.log('%cGetPosts Response', 'color: green', ' => ', res);
+        console.log('%cGetPosts Response', 'color: green', ' => ', res);
         yield put(AppAction.GetPostsSuccess(res.data));
       } else {
         console.log('%cGetPosts Response', 'color: red', ' => ', res);
@@ -101,12 +101,27 @@ export default class AppMiddleware {
       console.log(`%c${err.name}`, 'color: red', ' => ', err);
     }
   }
+  static *GetInfo() {
+    try {
+      const user = yield AsyncStorage.getItem('user');
+      const uid = JSON.parse(user).uid;
+      const docRef = yield firestore().collection('Users').doc(uid);
+      const userData = yield docRef.get();
+      console.log('saga', userData._data);
+      yield put(AppAction.GetInfoSuccess(userData._data));
+    } catch (e) {
+      console.log('Not Inserted due to Error', e);
+    }
+  }
   static *SaveInfo({payload}) {
     const {name, email, address, phone, state, country, image} = payload;
     console.log(payload);
     try {
-      const usersCollection = yield firestore().collection('Users');
-      const response = yield usersCollection.add({
+      const user = yield AsyncStorage.getItem('user');
+      const uid = JSON.parse(user).uid;
+      console.log(uid);
+      const docRef = yield firestore().collection('Users').doc(uid);
+      yield docRef.set({
         name: name,
         email: email,
         address: address,
@@ -115,14 +130,10 @@ export default class AppMiddleware {
         country: country,
         image: null,
       });
-      if (response) {
-        console.log(response, 'response');
-        yield put(AppAction.SaveInfoSuccess(JSON.parse(response)));
-        alert('info inserted');
-      } else {
-        yield put(AppAction.SaveInfoFailure());
-        console.log('Not Inserted');
-      }
-    } catch (e) {}
+      yield put(AppAction.SaveInfoSuccess());
+    } catch (e) {
+      yield put(AppAction.SaveInfoSuccess());
+      console.log('Not Inserted due to Error', e);
+    }
   }
 }

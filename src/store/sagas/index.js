@@ -7,6 +7,7 @@ import {
   SIGNUP,
   SIGNIN,
   SAVE_INFO,
+  GET_INFO,
 } from '../constants';
 
 export function* Sagas() {
@@ -17,5 +18,6 @@ export function* Sagas() {
     yield takeLatest(GET_POSTS, AppMiddleware.GetPosts),
     yield takeLatest(LOGOUT, AppMiddleware.Logout),
     yield takeLatest(SAVE_INFO, AppMiddleware.SaveInfo),
+    yield takeLatest(GET_INFO, AppMiddleware.GetInfo),
   ]);
 }

@@ -14,6 +14,9 @@ import {
   GET_POSTS,
   GET_POSTS_SUCCESS,
   GET_POSTS_FAILURE,
+  GET_INFO,
+  GET_INFO_SUCCESS,
+  GET_INFO_FAILURE,
   LOGOUT,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -104,11 +107,29 @@ export default function AppReducer(state = initialState, action) {
     case SAVE_INFO_SUCCESS:
       state = {
         ...state,
-        userInfo: action.payload,
         loader: false,
       };
       break;
     case SAVE_INFO_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case GET_POSTS:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case GET_POSTS_SUCCESS:
+      state = {
+        ...state,
+        posts: action.payload,
+        loader: false,
+      };
+      break;
+    case GET_POSTS_FAILURE:
       state = {
         ...state,
         loader: false,
@@ -130,26 +151,25 @@ export default function AppReducer(state = initialState, action) {
       };
       break;
 
-    case GET_POSTS:
+    case GET_INFO:
       state = {
         ...state,
         loader: true,
       };
       break;
-    case GET_POSTS_SUCCESS:
+    case GET_INFO_SUCCESS:
       state = {
         ...state,
-        posts: action.payload,
+        userInfo: action.payload,
         loader: false,
       };
       break;
-    case GET_POSTS_FAILURE:
+    case GET_INFO_FAILURE:
       state = {
         ...state,
         loader: false,
       };
       break;
-
     case LOADER_TRUE:
       state = {
         ...state,

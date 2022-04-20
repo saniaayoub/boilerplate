@@ -22,5 +22,9 @@ export const SAVE_INFO = 'SAVE_INFO';
 export const SAVE_INFO_SUCCESS = 'SAVE_INFO_SUCCESS';
 export const SAVE_INFO_FAILURE = 'SAVE_INFO_FAILURE';
 
+export const GET_INFO = 'GET_INFO';
+export const GET_INFO_SUCCESS = 'GET_INFO_SUCCESS';
+export const GET_INFO_FAILURE = 'GET_INFO_FAILURE';
+
 export const LOADER_TRUE = 'LOADER_TRUE';
 export const LOADER_FALSE = 'LOADER_FALSE';

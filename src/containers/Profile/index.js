@@ -1,4 +1,4 @@
-import React, {Component, useRef, useState} from 'react';
+import React, {Component, useEffect, useRef, useState} from 'react';
 import {View, ScrollView, Text, Image} from 'react-native';
 import {connect} from 'react-redux';
 import {Button, Forminput, Header} from '../../components';
@@ -8,8 +8,8 @@ import styles from './styles';
 import {useSelector, useDispatch} from 'react-redux';
 const Profile = () => {
   const loader = useSelector(state => state.AppReducer.loader);
+  const userInfo = useSelector(state => state.AppReducer.userInfo);
   const dispatch = useDispatch();
-  const inputRef = useRef(null);
   const [filePath, setFilePath] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,12 +28,9 @@ const Profile = () => {
   const [errCountry, setErrCountry] = useState('');
   const [errPhone, setErrPhone] = useState('');
 
-  const validateName = name => {
-    let validName = Utils.isFullNameValid(name);
-    setName(name);
-    setValidName(validName);
-    setErrName('');
-  };
+  useEffect(() => {
+    dispatch(AppAction.GetInfo());
+  }, []);
   const saveInfo = () => {
     // const {saveInfo} = props;
     if (!name) setErrName('Name cannot be empty');
@@ -84,7 +81,7 @@ const Profile = () => {
               Name{' '}
             </Text>
             <Forminput.TextField
-              placeholder="Name"
+              placeholder={userInfo.name}
               returnKeyType="next"
               autoCapitalize="none"
               onChangeText={name => {
@@ -114,7 +111,7 @@ const Profile = () => {
               Email{' '}
             </Text>
             <Forminput.TextField
-              placeholder="Email"
+              placeholder={userInfo.email}
               returnKeyType="next"
               autoCapitalize="none"
               onChangeText={email => {
@@ -136,7 +133,7 @@ const Profile = () => {
               Address{' '}
             </Text>
             <Forminput.TextField
-              placeholder="Address"
+              placeholder={userInfo.address}
               returnKeyType="next"
               autoCapitalize="none"
               onChangeText={address => {
@@ -163,7 +160,7 @@ const Profile = () => {
               State{' '}
             </Text>
             <Forminput.TextField
-              placeholder="State"
+              placeholder={userInfo.state}
               returnKeyType="next"
               autoCapitalize="none"
               onChangeText={state => {
@@ -193,7 +190,7 @@ const Profile = () => {
               Country{' '}
             </Text>
             <Forminput.TextField
-              placeholder="Country"
+              placeholder={userInfo.country}
               returnKeyType="next"
               autoCapitalize="none"
               onChangeText={country => {
@@ -223,7 +220,7 @@ const Profile = () => {
               Phone No.{' '}
             </Text>
             <Forminput.TextField
-              placeholder="Phone no"
+              placeholder={userInfo.phoneno}
               returnKeyType="done"
               autoCapitalize="none"
               onChangeText={phone => {
