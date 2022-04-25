@@ -1,16 +1,28 @@
 import React, {Component, useEffect, useRef, useState} from 'react';
-import {View, ScrollView, Text, Image} from 'react-native';
-import {connect} from 'react-redux';
+import {
+  View,
+  ScrollView,
+  Text,
+  Image,
+  TouchableOpacity,
+  PermissionsAndroid,
+} from 'react-native';
 import {Button, Forminput, Header} from '../../components';
 import {Metrix, NavigationService, Colors, Utils} from '../../config';
 import {AppAction} from '../../store/actions';
 import styles from './styles';
 import {useSelector, useDispatch} from 'react-redux';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import RBSheet from 'react-native-raw-bottom-sheet';
+
 const Profile = () => {
+  const refRBSheet = useRef();
   const loader = useSelector(state => state.AppReducer.loader);
   const userInfo = useSelector(state => state.AppReducer.userInfo);
+  const userImage = useSelector(state => state.AppReducer.profileImg);
   const dispatch = useDispatch();
-  const [filePath, setFilePath] = useState(null);
+  const [image, setImage] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -30,9 +42,10 @@ const Profile = () => {
 
   useEffect(() => {
     dispatch(AppAction.GetInfo());
+    dispatch(AppAction.ImgRetrieve());
   }, []);
+
   const saveInfo = () => {
-    // const {saveInfo} = props;
     if (!name) setErrName('Name cannot be empty');
     if (!state) setErrState('state cannot be empty');
     if (!address) setErrAddress('address cannot be empty');
@@ -48,6 +61,171 @@ const Profile = () => {
         AppAction.SaveInfo({email, name, phone, address, state, country}),
       );
   };
+
+  const ImagePicker = () => {
+    return (
+      <View style={{flex: 1, flexDirection: 'column'}}>
+        <TouchableOpacity
+          onPress={() => captureImage('photo')}
+          style={{
+            flexDirection: 'row',
+            marginLeft: Metrix.HorizontalSize(20),
+            marginTop: Metrix.VerticalSize(20),
+          }}>
+          <Icon name={'camera'} color={'black'} size={26} />
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              fontSize: Metrix.FontLarge,
+              marginLeft: Metrix.HorizontalSize(20),
+            }}>
+            {' '}
+            Capture Image{' '}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => chooseFile('photo')}
+          style={{
+            flexDirection: 'row',
+            marginLeft: Metrix.HorizontalSize(20),
+            marginTop: Metrix.VerticalSize(20),
+          }}>
+          <Icon name={'upload'} color={'black'} size={26} />
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              fontSize: Metrix.FontLarge,
+              marginLeft: Metrix.HorizontalSize(20),
+            }}>
+            {' '}
+            Upload From Gallery{' '}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs camera permission',
+          },
+        );
+        // If CAMERA Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    } else return true;
+  };
+
+  const requestExternalWritePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs write permission',
+          },
+        );
+        // If WRITE_EXTERNAL_STORAGE Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        alert('Write permission err', err);
+      }
+      return false;
+    } else return true;
+  };
+
+  const captureImage = async type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+      videoQuality: 'low',
+      durationLimit: 30, //Video max duration in seconds
+      saveToPhotos: true,
+    };
+    let isCameraPermitted = await requestCameraPermission();
+    let isStoragePermitted = await requestExternalWritePermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera(options, response => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+          alert('User cancelled camera picker');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          alert('Camera not available on device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          alert(response.errorMessage);
+          return;
+        }
+        console.log('base64 -> ', response.assets[0].base64);
+        console.log('uri -> ', response.assets[0].uri);
+        console.log('width -> ', response.assets[0].width);
+        console.log('height -> ', response.assets[0].height);
+        console.log('fileSize -> ', response.assets[0].fileSize);
+        console.log('type -> ', response.assets[0].type);
+        console.log('fileName -> ', response.assets[0].fileName);
+        refRBSheet.current.close();
+        dispatch(AppAction.ImgUpload({image: response.assets[0].uri}));
+        dispatch(AppAction.ImgRetrieve());
+        setImage(response.assets[0].uri);
+      });
+    }
+  };
+
+  const chooseFile = type => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+    };
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        alert('User cancelled camera picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        alert(response.errorMessage);
+        return;
+      }
+      console.log('base64 -> ', response.assets[0].base64);
+      console.log('uri -> ', response.assets[0].uri);
+      console.log('width -> ', response.assets[0].width);
+      console.log('height -> ', response.assets[0].height);
+      console.log('fileSize -> ', response.assets[0].fileSize);
+      console.log('type -> ', response.assets[0].type);
+      console.log('fileName -> ', response.assets[0].fileName);
+      refRBSheet.current.close();
+      dispatch(AppAction.ImgUpload({image: response.assets[0].uri}));
+      dispatch(AppAction.ImgRetrieve());
+      setImage(response.assets[0].uri);
+    });
+  };
+
   return (
     <View style={styles.container}>
       <Header.Standard
@@ -67,8 +245,40 @@ const Profile = () => {
           <Text style={{color: Colors.White, fontSize: Metrix.FontSmall}}>
             Please Complete your Profile
           </Text>
-          <View>
-            <Image source={{uri: filePath}} style={styles.imageStyle} />
+          <View style={{borderColor: 'red', borderWidth: 1}}>
+            <Image
+              source={{uri: image ? image : userImage}}
+              style={styles.imageStyle}
+            />
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                right: 10,
+                bottom: 10,
+                zIndex: 1000,
+              }}
+              onPress={() => refRBSheet.current.open()}>
+              <Icon name={'camera'} color={'red'} size={15} />
+            </TouchableOpacity>
+            <RBSheet
+              ref={refRBSheet}
+              closeOnDragDown={true}
+              closeOnPressMask={false}
+              customStyles={{
+                container: {
+                  borderTopLeftRadius: Metrix.VerticalSize(20),
+                  borderTopRightRadius: Metrix.VerticalSize(20),
+                  height: Metrix.VerticalSize(200),
+                },
+                wrapper: {
+                  backgroundColor: 'transparent',
+                },
+                draggableIcon: {
+                  backgroundColor: '#000',
+                },
+              }}>
+              <ImagePicker />
+            </RBSheet>
           </View>
           <View style={{paddingBottom: Metrix.VerticalSize(5)}}>
             <Text
@@ -249,19 +459,6 @@ const Profile = () => {
       </ScrollView>
     </View>
   );
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    saveInfo: payload => {
-      dispatch(AppAction.SaveInfo(payload));
-    },
-  };
-};
-const mapStateToProps = state => {
-  return {
-    loading: state.AppReducer.loader,
-  };
 };
 
 export default Profile;

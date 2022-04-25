@@ -6,6 +6,7 @@ import {put} from 'redux-saga/effects';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 export default class AppMiddleware {
   static *SignIn({payload}) {
@@ -113,6 +114,18 @@ export default class AppMiddleware {
       console.log('Not Inserted due to Error', e);
     }
   }
+  static *SendEmail(payload) {
+    try {
+      yield auth().sendPasswordResetEmail(payload.payload);
+      yield put(AppAction.SendEmailSuccess());
+      Alert.alert(
+        'Please Check your email and click on the link to reset your password',
+      );
+    } catch (e) {
+      yield put(AppAction.SendEmailFailure());
+      Alert.alert(e);
+    }
+  }
   static *SaveInfo({payload}) {
     const {name, email, address, phone, state, country, image} = payload;
     console.log(payload);
@@ -133,7 +146,42 @@ export default class AppMiddleware {
       yield put(AppAction.SaveInfoSuccess());
     } catch (e) {
       yield put(AppAction.SaveInfoSuccess());
-      console.log('Not Inserted due to Error', e);
+      Alert.alert('Not Inserted due to Error', e);
+    }
+  }
+  static *ImgUpload({payload}) {
+    const {image} = payload;
+    try {
+      const user = yield AsyncStorage.getItem('user');
+      const uid = JSON.parse(user).uid;
+      let imageName = uid + '.' + image.split('.').pop();
+      console.log('saga', imageName);
+      console.log(image);
+      const reference = yield storage().ref(imageName);
+      yield reference.putFile(image);
+      yield put(AppAction.ImgUploadSuccess());
+      Alert.alert('Profile picture updated successfully');
+    } catch (e) {
+      console.log(e);
+      yield put(AppAction.ImgUploadFailure());
+      Alert.alert('Profile picture not updated');
+    }
+  }
+  static *ImgRetrieve() {
+    let image = '';
+    try {
+      const user = yield AsyncStorage.getItem('user');
+      const uid = JSON.parse(user).uid;
+      let imageName = uid + '.jpg';
+      console.log('saga1', imageName);
+      const reference = yield storage().ref('/' + imageName);
+      console.log(reference);
+      image = yield reference.getDownloadURL();
+      yield put(AppAction.ImgRetrieveSuccess(image));
+    } catch (e) {
+      console.log(e);
+      yield put(AppAction.ImgRetrieveFailure());
+      Alert.alert('Error', e);
     }
   }
 }

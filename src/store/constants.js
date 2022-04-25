@@ -26,5 +26,17 @@ export const GET_INFO = 'GET_INFO';
 export const GET_INFO_SUCCESS = 'GET_INFO_SUCCESS';
 export const GET_INFO_FAILURE = 'GET_INFO_FAILURE';
 
+export const SEND_EMAIL = 'SEND_EMAIL';
+export const SEND_EMAIL_SUCCESS = 'SEND_EMAIL_SUCCESS';
+export const SEND_EMAIL_FAILURE = 'SEND_EMAIL_FAILURE';
+
+export const IMG_UPLOAD = 'IMG_UPLOAD';
+export const IMG_UPLOAD_SUCCESS = 'IMG_UPLOAD_SUCCESS';
+export const IMG_UPLOAD_FAILURE = 'IMG_UPLOAD_FAILURE';
+
+export const IMG_RET = 'IMG_RET';
+export const IMG_RET_SUCCESS = 'IMG_RET_SUCCESS';
+export const IMG_RET_FAILURE = 'IMG_RET_FAILURE';
+
 export const LOADER_TRUE = 'LOADER_TRUE';
 export const LOADER_FALSE = 'LOADER_FALSE';

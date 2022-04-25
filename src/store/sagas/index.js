@@ -8,6 +8,9 @@ import {
   SIGNIN,
   SAVE_INFO,
   GET_INFO,
+  SEND_EMAIL,
+  IMG_UPLOAD,
+  IMG_RET,
 } from '../constants';
 
 export function* Sagas() {
@@ -19,5 +22,8 @@ export function* Sagas() {
     yield takeLatest(LOGOUT, AppMiddleware.Logout),
     yield takeLatest(SAVE_INFO, AppMiddleware.SaveInfo),
     yield takeLatest(GET_INFO, AppMiddleware.GetInfo),
+    yield takeLatest(SEND_EMAIL, AppMiddleware.SendEmail),
+    yield takeLatest(IMG_UPLOAD, AppMiddleware.ImgUpload),
+    yield takeLatest(IMG_RET, AppMiddleware.ImgRetrieve),
   ]);
 }

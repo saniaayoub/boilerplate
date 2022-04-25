@@ -5,4 +5,14 @@ import AddPost from './AddPost';
 import ImageUpload from './ImageUpload';
 import SignUp from './SignUp';
 import Profile from './Profile';
-export {Splash, SignIn, Home, AddPost, ImageUpload, SignUp, Profile};
+import ForgotPass from './ForgotPass';
+export {
+  Splash,
+  SignIn,
+  Home,
+  AddPost,
+  ImageUpload,
+  SignUp,
+  Profile,
+  ForgotPass,
+};

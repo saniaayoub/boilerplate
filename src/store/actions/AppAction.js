@@ -20,6 +20,15 @@ import {
   GET_INFO,
   GET_INFO_SUCCESS,
   GET_INFO_FAILURE,
+  SEND_EMAIL,
+  SEND_EMAIL_SUCCESS,
+  SEND_EMAIL_FAILURE,
+  IMG_UPLOAD,
+  IMG_UPLOAD_SUCCESS,
+  IMG_UPLOAD_FAILURE,
+  IMG_RET,
+  IMG_RET_SUCCESS,
+  IMG_RET_FAILURE,
   LOADER_FALSE,
   LOADER_TRUE,
 } from '../constants';
@@ -59,16 +68,32 @@ export default class AppAction {
       type: SIGNUP_FAILURE,
     };
   }
+
+  static SendEmail(payload) {
+    return {
+      type: SEND_EMAIL,
+      payload,
+    };
+  }
+  static SendEmailSuccess() {
+    return {
+      type: SEND_EMAIL_SUCCESS,
+    };
+  }
+  static SendEmailFailure() {
+    return {
+      type: SEND_EMAIL_FAILURE,
+    };
+  }
   static SaveInfo(payload) {
     return {
       type: SAVE_INFO,
       payload,
     };
   }
-  static SaveInfoSuccess(payload) {
+  static SaveInfoSuccess() {
     return {
       type: SAVE_INFO_SUCCESS,
-      payload,
     };
   }
   static SaveInfoFailure() {
@@ -76,10 +101,9 @@ export default class AppAction {
       type: SAVE_INFO_FAILURE,
     };
   }
-  static GetInfo(payload) {
+  static GetInfo() {
     return {
       type: GET_INFO,
-      payload,
     };
   }
   static GetInfoSuccess(payload) {
@@ -93,7 +117,38 @@ export default class AppAction {
       type: GET_INFO_FAILURE,
     };
   }
-
+  static ImgUpload(payload) {
+    return {
+      type: IMG_UPLOAD,
+      payload,
+    };
+  }
+  static ImgUploadSuccess() {
+    return {
+      type: IMG_UPLOAD_SUCCESS,
+    };
+  }
+  static ImgUploadFailure() {
+    return {
+      type: IMG_UPLOAD_FAILURE,
+    };
+  }
+  static ImgRetrieve() {
+    return {
+      type: IMG_RET,
+    };
+  }
+  static ImgRetrieveSuccess(payload) {
+    return {
+      type: IMG_RET_SUCCESS,
+      payload,
+    };
+  }
+  static ImgRetrieveFailure() {
+    return {
+      type: IMG_RET_FAILURE,
+    };
+  }
   static Logout() {
     return {
       type: LOGOUT,

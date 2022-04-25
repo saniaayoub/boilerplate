@@ -6,26 +6,26 @@ import {Metrix, Images, Utils, Constants} from '../../config';
 import {AppAction} from '../../store/actions';
 import styles from './styles';
 import {NavigationService} from '../../config';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
-class SignIn extends Component {
+class ForgotPass extends Component {
   state = {
     email: '',
-    password: '',
     emailErrMsg: '',
-    passErrMsg: '',
     validEmail: true,
-    validPass: true,
   };
 
-  signin = () => {
-    const {email, password, validEmail, validPass} = this.state;
-    const {signin} = this.props;
+  sendEmail = () => {
+    const {email, validEmail} = this.state;
+    const {sendEmail} = this.props;
     if (!email) this.setState({emailErrMsg: 'Email is a required field'});
-    if (!password) this.setState({passErrMsg: 'Password is a required field'});
     else if (!validEmail)
       this.setState({emailErrMsg: 'Please enter valid email address.'});
-    else if (!validPass) this.setState({passErrMsg: 'Password is not valid'});
-    else signin({email, password});
+    else sendEmail(email);
+    this.setState({
+      email: '',
+    });
+    NavigationService.goBack();
   };
 
   validateEmail = email => {
@@ -33,16 +33,12 @@ class SignIn extends Component {
     this.setState({email, validEmail, emailErrMsg: ''});
   };
 
-  validatePass = password => {
-    let validPass = Utils.isPasswordValid(password);
-    this.setState({password, validPass, passErrMsg: ''});
-  };
   signUp = () => {
     const {navigate} = NavigationService;
     navigate('SignUp');
   };
   render() {
-    const {email, password, emailErrMsg, passErrMsg} = this.state;
+    const {email, emailErrMsg} = this.state;
     return (
       <View style={styles.container}>
         <ScrollView
@@ -51,12 +47,18 @@ class SignIn extends Component {
           keyboardDismissMode="interactive"
           style={{width: '100%'}}>
           <View style={styles.content}>
-            <Image
-              source={Images.Logo}
-              style={styles.image}
-              resizeMode="contain"
-            />
-            <Text style={styles.headingStyle}>Login</Text>
+            <View style={styles.iconView}>
+              <Icon name="lock" color={'red'} size={Metrix.VerticalSize(100)} />
+            </View>
+            <Text style={styles.headingStyle}>Trouble Login In?</Text>
+            <Text
+              style={{
+                marginTop: Metrix.VerticalSize(10),
+                color: 'white',
+                fontSize: Metrix.FontSmall,
+              }}>
+              Enter Your Email below
+            </Text>
             <Forminput.TextField
               placeholder="Email"
               keyboardType="email-address"
@@ -72,34 +74,11 @@ class SignIn extends Component {
               }}
             />
 
-            <Forminput.TextField
-              placeholder="Password"
-              secureTextEntry
-              autoCapitalize="none"
-              returnKeyType="done"
-              onChangeText={this.validatePass}
-              errMsg={passErrMsg}
-              value={password}
-              containerStyle={{marginTop: Metrix.VerticalSize(15)}}
-              reference={ref => {
-                this.passInputRef = ref;
-              }}
-              onSubmitEditing={this.signin}
-            />
-
-            <Text
-              style={styles.forgetPassText}
-              onPress={() => {
-                NavigationService.navigate('ForgotPass');
-              }}>
-              Forgot Password?
-            </Text>
-
             <Button.Standard
-              text="Sign In"
+              text="Send Email"
               isLoading={this.props.loading}
               disabled={this.props.loading}
-              onPress={this.signin}
+              onPress={() => this.sendEmail()}
               containerStyle={{marginTop: Metrix.VerticalSize(35)}}
             />
             <Text
@@ -118,8 +97,8 @@ class SignIn extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    signin: payload => {
-      dispatch(AppAction.SignIn(payload));
+    sendEmail: payload => {
+      dispatch(AppAction.SendEmail(payload));
     },
   };
 }
@@ -130,4 +109,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPass);

@@ -5,6 +5,9 @@ import {
   SIGNUP,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE,
+  SEND_EMAIL,
+  SEND_EMAIL_SUCCESS,
+  SEND_EMAIL_FAILURE,
   SAVE_INFO,
   SAVE_INFO_SUCCESS,
   SAVE_INFO_FAILURE,
@@ -17,6 +20,12 @@ import {
   GET_INFO,
   GET_INFO_SUCCESS,
   GET_INFO_FAILURE,
+  IMG_UPLOAD,
+  IMG_UPLOAD_SUCCESS,
+  IMG_UPLOAD_FAILURE,
+  IMG_RET,
+  IMG_RET_SUCCESS,
+  IMG_RET_FAILURE,
   LOGOUT,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -27,6 +36,7 @@ import {
 const initialState = {
   user: {},
   userInfo: {},
+  profileImg: '',
   loader: false,
   posts: [],
 };
@@ -81,6 +91,7 @@ export default function AppReducer(state = initialState, action) {
       state = {
         user: {},
         posts: [],
+        userInfo: {},
         loader: false,
       };
       break;
@@ -90,7 +101,24 @@ export default function AppReducer(state = initialState, action) {
         loader: false,
       };
       break;
-
+    case SEND_EMAIL:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case SEND_EMAIL_SUCCESS:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case SEND_EMAIL_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
     case ADD_POST:
       state = {
         ...state,
@@ -135,7 +163,44 @@ export default function AppReducer(state = initialState, action) {
         loader: false,
       };
       break;
+    case IMG_UPLOAD:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case IMG_UPLOAD_SUCCESS:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case IMG_UPLOAD_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
 
+    case IMG_RET:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case IMG_RET_SUCCESS:
+      state = {
+        ...state,
+        profileImg: action.payload,
+        loader: false,
+      };
+      break;
+    case IMG_RET_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
     case ADD_POST_SUCCESS:
       // state.posts.unshift(action.payload)
       state = {
