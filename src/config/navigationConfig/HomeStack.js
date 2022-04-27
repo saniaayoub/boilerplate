@@ -1,4 +1,4 @@
-import {AddPost, Home, ImageUpload, Profile} from '../../containers';
+import {AddPost, Home, ImageUpload, Profile, Weather} from '../../containers';
 
 export const HomeStack = [
   {
@@ -20,5 +20,10 @@ export const HomeStack = [
     name: 'Profile',
     component: Profile,
     key: 'Profile',
+  },
+  {
+    name: 'Weather',
+    component: Weather,
+    key: 'Weather',
   },
 ];

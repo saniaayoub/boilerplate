@@ -53,7 +53,7 @@ class Home extends Component {
         <Button.FloatingButton
           customStyle={{
             position: 'absolute',
-            bottom: Metrix.VerticalSize(125),
+            bottom: Metrix.VerticalSize(205),
             right: Metrix.HorizontalSize(20),
           }}
           onPress={() => {
@@ -63,12 +63,23 @@ class Home extends Component {
         <Button.FloatingButton
           customStyle={{
             position: 'absolute',
-            bottom: Metrix.VerticalSize(40),
+            bottom: Metrix.VerticalSize(125),
             right: Metrix.HorizontalSize(20),
           }}
           iconComp={<Icon name="user" color="white" size={18} />}
           onPress={() => {
             this.props.navigation.navigate('Profile');
+          }}
+        />
+        <Button.FloatingButton
+          customStyle={{
+            position: 'absolute',
+            bottom: Metrix.VerticalSize(45),
+            right: Metrix.HorizontalSize(20),
+          }}
+          iconComp={<Icon name="cloud" color="white" size={18} />}
+          onPress={() => {
+            this.props.navigation.navigate('Weather');
           }}
         />
       </View>

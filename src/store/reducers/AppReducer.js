@@ -26,6 +26,9 @@ import {
   IMG_RET,
   IMG_RET_SUCCESS,
   IMG_RET_FAILURE,
+  WEATHER_CHK,
+  WEATHER_CHK_SUCCESS,
+  WEATHER_CHK_FAILURE,
   LOGOUT,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -39,6 +42,7 @@ const initialState = {
   profileImg: '',
   loader: false,
   posts: [],
+  weatherData: {},
 };
 
 export default function AppReducer(state = initialState, action) {
@@ -92,6 +96,7 @@ export default function AppReducer(state = initialState, action) {
         user: {},
         posts: [],
         userInfo: {},
+        weatherData: {},
         loader: false,
       };
       break;
@@ -230,6 +235,26 @@ export default function AppReducer(state = initialState, action) {
       };
       break;
     case GET_INFO_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case WEATHER_CHK:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case WEATHER_CHK_SUCCESS:
+      state = {
+        ...state,
+        weatherData: action.payload,
+        loader: false,
+      };
+      console.log('Reducer', action.payload);
+      break;
+    case WEATHER_CHK_FAILURE:
       state = {
         ...state,
         loader: false,

@@ -29,6 +29,9 @@ import {
   IMG_RET,
   IMG_RET_SUCCESS,
   IMG_RET_FAILURE,
+  WEATHER_CHK,
+  WEATHER_CHK_SUCCESS,
+  WEATHER_CHK_FAILURE,
   LOADER_FALSE,
   LOADER_TRUE,
 } from '../constants';
@@ -196,6 +199,24 @@ export default class AppAction {
   static GetPostsFailure() {
     return {
       type: GET_POSTS_FAILURE,
+    };
+  }
+
+  static WeatherCheck(payload) {
+    return {
+      type: WEATHER_CHK,
+      payload,
+    };
+  }
+  static WeatherCheckSuccess(payload) {
+    return {
+      type: WEATHER_CHK_SUCCESS,
+      payload,
+    };
+  }
+  static WeatherCheckFailure() {
+    return {
+      type: WEATHER_CHK_FAILURE,
     };
   }
 

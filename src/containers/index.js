@@ -6,6 +6,7 @@ import ImageUpload from './ImageUpload';
 import SignUp from './SignUp';
 import Profile from './Profile';
 import ForgotPass from './ForgotPass';
+import Weather from './Weather';
 export {
   Splash,
   SignIn,
@@ -15,4 +16,5 @@ export {
   SignUp,
   Profile,
   ForgotPass,
+  Weather,
 };

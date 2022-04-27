@@ -38,5 +38,9 @@ export const IMG_RET = 'IMG_RET';
 export const IMG_RET_SUCCESS = 'IMG_RET_SUCCESS';
 export const IMG_RET_FAILURE = 'IMG_RET_FAILURE';
 
+export const WEATHER_CHK = 'WEATHER_CHK';
+export const WEATHER_CHK_SUCCESS = 'WEATHER_CHK_SUCCESS';
+export const WEATHER_CHK_FAILURE = 'WEATHER_CHK_FAILURE';
+
 export const LOADER_TRUE = 'LOADER_TRUE';
 export const LOADER_FALSE = 'LOADER_FALSE';

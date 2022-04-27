@@ -184,4 +184,23 @@ export default class AppMiddleware {
       Alert.alert('Error', e);
     }
   }
+  static *WeatherCheck({payload}) {
+    const {city} = payload;
+    const apiKey = 'ca3582fd53c1b38d6d75c4b67b8a3ff2';
+    let api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    try {
+      let res = yield ApiCaller.Get(api);
+      if (res.status == 200) {
+        const {main, name, wind} = res.data;
+        yield put(AppAction.WeatherCheckSuccess({main, name, wind}));
+      } else {
+        console.log('%cAddPost Response', 'color: red', ' => ', res);
+        yield put(AppAction.WeatherCheckFailure());
+      }
+    } catch (e) {
+      console.log(e);
+      yield put(AppAction.WeatherCheckFailure());
+      Alert.alert('Error', e);
+    }
+  }
 }

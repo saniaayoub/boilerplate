@@ -11,6 +11,7 @@ import {
   SEND_EMAIL,
   IMG_UPLOAD,
   IMG_RET,
+  WEATHER_CHK,
 } from '../constants';
 
 export function* Sagas() {
@@ -25,5 +26,6 @@ export function* Sagas() {
     yield takeLatest(SEND_EMAIL, AppMiddleware.SendEmail),
     yield takeLatest(IMG_UPLOAD, AppMiddleware.ImgUpload),
     yield takeLatest(IMG_RET, AppMiddleware.ImgRetrieve),
+    yield takeLatest(WEATHER_CHK, AppMiddleware.WeatherCheck),
   ]);
 }
