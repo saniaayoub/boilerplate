@@ -1,105 +1,89 @@
-import React, {Component} from 'react';
-import {View, ScrollView, Text} from 'react-native';
-import {connect} from 'react-redux';
+import React, {Component, useEffect, useState} from 'react';
+import {View, ScrollView, Text, ActivityIndicator} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {Button, Forminput, Header} from '../../components';
 import {Metrix, NavigationService, Utils} from '../../config';
 import {AppAction} from '../../store/actions';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-class Weather extends Component {
-  state = {
-    city: 'Karachi',
-    validCity: false,
-    cityErrMsg: '',
-  };
+const Weather = () => {
+  const dispatch = useDispatch();
+  const [city, setCity] = useState('Karachi');
+  const [validCity, setValidCity] = useState(false);
+  const [cityErrorMsg, setErrorMsg] = useState('');
 
-  componentDidMount = () => {
-    this.props.weatherCheck({city: this.state.city});
-  };
-  checkWeather = () => {
-    const {city, validCity} = this.state;
-    if (!city) this.setState({cityErrMsg: 'Please Enter city.'});
-    else if (!validCity) this.setState({cityErrMsg: 'Please enter valid city'});
+  useEffect(() => {
+    dispatch(AppAction.WeatherCheck({city}));
+  }, []);
+
+  const weatherInfo = useSelector(state => state.AppReducer.weatherData);
+  const loader = useSelector(state => state.AppReducer.loader);
+  const checkWeather = () => {
+    if (!city) setErrorMsg('Please Enter city.');
+    else if (!validCity) setErrorMsg('Please enter valid city');
     else {
-      this.props.weatherCheck({city});
+      dispatch(AppAction.WeatherCheck({city}));
     }
   };
 
-  render() {
-    const {city, validCity, cityErrMsg} = this.state;
-    const {main, name, wind} = this.props.weatherData;
-    console.log(main);
-    return (
-      <View style={styles.container}>
-        <Header.Standard
-          leftIconName={'arrow-left'}
-          onPressLeft={NavigationService.goBack}
-          Heading={'Weather'}
-        />
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="interactive"
-          style={{width: '100%'}}>
-          <View style={styles.content}>
-            <View style={{marginBottom: Metrix.VerticalSize(20)}}>
-              <Forminput.TextField
-                placeholder="Enter City"
-                returnKeyType="done"
-                onChangeText={city => {
-                  let validate = Utils.isFullNameValid(city);
-                  this.setState({
-                    city: city,
-                    validCity: validate,
-                    cityErrMsg: '',
-                  });
-                }}
-                value={city}
-                blurOnSubmit={false}
-                errMsg={cityErrMsg}
-                containerStyle={{marginTop: Metrix.VerticalSize(25)}}
-              />
-            </View>
-            <Button.Standard
-              text="Check Weather"
-              onPress={() => this.checkWeather()}
+  return (
+    <View style={styles.container}>
+      <Header.Standard
+        leftIconName={'arrow-left'}
+        onPressLeft={NavigationService.goBack}
+        Heading={'Weather'}
+      />
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        style={{width: '100%'}}>
+        <View style={styles.content}>
+          <View style={{marginBottom: Metrix.VerticalSize(20)}}>
+            <Forminput.TextField
+              placeholder="Enter City"
+              returnKeyType="done"
+              onChangeText={city => {
+                let validate = Utils.isFullNameValid(city);
+                setCity(city);
+                setValidCity(validate);
+                setErrorMsg('');
+              }}
+              value={city}
+              blurOnSubmit={false}
+              errMsg={cityErrorMsg}
+              containerStyle={{marginTop: Metrix.VerticalSize(25)}}
             />
-            <View>
+          </View>
+          <Button.Standard
+            text="Check Weather"
+            onPress={() => checkWeather()}
+          />
+          {loader ? (
+            <ActivityIndicator />
+          ) : (
+            <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <Text
                 style={{
                   marginVertical: Metrix.VerticalSize(15),
                   color: 'white',
                   fontSize: Metrix.FontExtraLarge,
                 }}>
-                {' '}
-                {name}
+                {weatherInfo.name}
               </Text>
               <Icon
                 name={'cloud'}
                 color={'skyblue'}
                 size={Metrix.VerticalSize(100)}
               />
-              <Text style={{color: 'yellow'}}>{main.temp}</Text>
+              <Text style={{color: 'yellow'}}>{weatherInfo.main?.temp}</Text>
             </View>
-          </View>
-        </ScrollView>
-      </View>
-    );
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    weatherCheck: payload => {
-      dispatch(AppAction.WeatherCheck(payload));
-    },
-  };
+          )}
+        </View>
+      </ScrollView>
+    </View>
+  );
 };
 
-const mapStateToProps = state => {
-  return {
-    weatherData: state.AppReducer.weatherData,
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Weather);
+export default Weather;
