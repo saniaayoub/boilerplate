@@ -32,6 +32,12 @@ import {
   WEATHER_CHK,
   WEATHER_CHK_SUCCESS,
   WEATHER_CHK_FAILURE,
+  GET_TOKEN,
+  GET_TOKEN_SUCCESS,
+  GET_TOKEN_FAILURE,
+  SEARCH_SONG,
+  SEARCH_SONG_SUCCESS,
+  SEARCH_SONG_FAILURE,
   LOADER_FALSE,
   LOADER_TRUE,
 } from '../constants';
@@ -217,6 +223,40 @@ export default class AppAction {
   static WeatherCheckFailure() {
     return {
       type: WEATHER_CHK_FAILURE,
+    };
+  }
+  static GetToken() {
+    return {
+      type: GET_TOKEN,
+    };
+  }
+  static GetTokenSuccess(payload) {
+    return {
+      type: GET_TOKEN_SUCCESS,
+      payload,
+    };
+  }
+  static GetTokenFailure() {
+    return {
+      type: GET_TOKEN_FAILURE,
+    };
+  }
+
+  static SearchSong(payload) {
+    return {
+      type: SEARCH_SONG,
+      payload,
+    };
+  }
+  static SearchSongSuccess(payload) {
+    return {
+      type: SEARCH_SONG_SUCCESS,
+      payload,
+    };
+  }
+  static SearchSongFailure() {
+    return {
+      type: SEARCH_SONG_FAILURE,
     };
   }
 

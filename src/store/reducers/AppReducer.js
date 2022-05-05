@@ -29,6 +29,12 @@ import {
   WEATHER_CHK,
   WEATHER_CHK_SUCCESS,
   WEATHER_CHK_FAILURE,
+  GET_TOKEN,
+  GET_TOKEN_SUCCESS,
+  GET_TOKEN_FAILURE,
+  SEARCH_SONG,
+  SEARCH_SONG_SUCCESS,
+  SEARCH_SONG_FAILURE,
   LOGOUT,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
@@ -43,6 +49,8 @@ const initialState = {
   loader: false,
   posts: [],
   weatherData: {},
+  accessToken: '',
+  songs: [],
 };
 
 export default function AppReducer(state = initialState, action) {
@@ -252,9 +260,46 @@ export default function AppReducer(state = initialState, action) {
         weatherData: action.payload,
         loader: false,
       };
-      console.log('Reducer', action.payload);
       break;
     case WEATHER_CHK_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case GET_TOKEN:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case GET_TOKEN_SUCCESS:
+      state = {
+        ...state,
+        accessToken: action.payload,
+        loader: false,
+      };
+      break;
+    case GET_TOKEN_FAILURE:
+      state = {
+        ...state,
+        loader: false,
+      };
+      break;
+    case SEARCH_SONG:
+      state = {
+        ...state,
+        loader: true,
+      };
+      break;
+    case SEARCH_SONG_SUCCESS:
+      state = {
+        ...state,
+        songs: action.payload,
+        loader: false,
+      };
+      break;
+    case SEARCH_SONG_FAILURE:
       state = {
         ...state,
         loader: false,

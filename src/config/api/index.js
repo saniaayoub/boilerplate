@@ -43,7 +43,10 @@ export default class ApiCaller {
     return await Axios.get(`${endPoint}`, {
       headers,
     })
-      .then(res => res)
+      .then(res => {
+        console.log('api response', res);
+        return res;
+      })
       .catch(err => err.response);
   };
 
@@ -51,7 +54,9 @@ export default class ApiCaller {
     return await Axios.post(`${endPoint}`, body, {
       headers,
     })
-      .then(res => res)
+      .then(res => {
+        return res.data.access_token;
+      })
       .catch(err => err.response);
   };
 

@@ -7,6 +7,7 @@ import SignUp from './SignUp';
 import Profile from './Profile';
 import ForgotPass from './ForgotPass';
 import Weather from './Weather';
+import Spotify from './Spotify';
 export {
   Splash,
   SignIn,
@@ -17,4 +18,5 @@ export {
   Profile,
   ForgotPass,
   Weather,
+  Spotify,
 };

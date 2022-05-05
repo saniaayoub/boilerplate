@@ -12,6 +12,8 @@ import {
   IMG_UPLOAD,
   IMG_RET,
   WEATHER_CHK,
+  GET_TOKEN,
+  SEARCH_SONG,
 } from '../constants';
 
 export function* Sagas() {
@@ -27,5 +29,7 @@ export function* Sagas() {
     yield takeLatest(IMG_UPLOAD, AppMiddleware.ImgUpload),
     yield takeLatest(IMG_RET, AppMiddleware.ImgRetrieve),
     yield takeLatest(WEATHER_CHK, AppMiddleware.WeatherCheck),
+    yield takeLatest(GET_TOKEN, AppMiddleware.GetToken),
+    yield takeLatest(SEARCH_SONG, AppMiddleware.SearchSong),
   ]);
 }

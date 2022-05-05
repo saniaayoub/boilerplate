@@ -7,6 +7,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import base64 from 'react-native-base64';
+
+const baseUrl = `https://api.spotify.com/v1`;
+const apiPrefix = `https://accounts.spotify.com/api`;
+const client_id = `ae9647085a894a05b0bddc7416f6618b`;
+const client_secret = `dc164187b24a4bfa9232242318140db1`;
 
 export default class AppMiddleware {
   static *SignIn({payload}) {
@@ -173,9 +179,8 @@ export default class AppMiddleware {
       const user = yield AsyncStorage.getItem('user');
       const uid = JSON.parse(user).uid;
       let imageName = uid + '.jpg';
-      console.log('saga1', imageName);
+      console.log('saga', imageName);
       const reference = yield storage().ref('/' + imageName);
-      console.log(reference);
       image = yield reference.getDownloadURL();
       yield put(AppAction.ImgRetrieveSuccess(image));
     } catch (e) {
@@ -194,13 +199,64 @@ export default class AppMiddleware {
         const {main, name, wind} = res.data;
         yield put(AppAction.WeatherCheckSuccess({main, name, wind}));
       } else {
-        console.log('%cAddPost Response', 'color: red', ' => ', res);
+        console.log('API Response', 'color: red', ' => ', res);
         yield put(AppAction.WeatherCheckFailure());
       }
     } catch (e) {
       console.log(e);
       yield put(AppAction.WeatherCheckFailure());
       Alert.alert('Error', e);
+    }
+  }
+  static *GetToken() {
+    const base64Credentials = base64.encode(client_id + ':' + client_secret);
+    try {
+      const res = yield ApiCaller.Post(
+        `${apiPrefix}/token`,
+        'grant_type=client_credentials',
+        {
+          Authorization: `Basic ${base64Credentials}`,
+          Content_Type: 'application/x-www-form-urlencoded',
+        },
+      );
+      console.log(res);
+      yield put(AppAction.GetTokenSuccess(res));
+    } catch (e) {
+      console.log(e);
+      yield put(AppAction.GetTokenFailure());
+    }
+  }
+  static *SearchSong({payload}) {
+    const {offset, limit, q, spotify_token} = payload;
+    console.log(offset, limit, q, spotify_token);
+    const uri = `${baseUrl}/search?type=album,artist,playlist,track&limit=${limit}&offset=${offset}&q=${encodeURIComponent(
+      q,
+    )}*&include_external=audio`;
+    try {
+      const res = yield ApiCaller.Get(uri, {
+        Authorization: `Bearer ${spotify_token}`,
+      });
+      if (res) {
+        const {
+          tracks: {items},
+        } = JSON.parse(res.request._response);
+        const songs = items.map(item => ({
+          id: item.id,
+          title: item.name,
+          popularity: item.popularity,
+          artist: item.artists ? item.artists[0].name : undefined,
+          album: item.album.name,
+          is_playable: item.is_playable,
+          preview_url: item.preview_url,
+          imageUri: item.album.images ? item.album.images[0].url : undefined,
+          trackUri: item.uri,
+        }));
+        console.log('songs', songs);
+        yield put(AppAction.SearchSongSuccess(songs));
+      }
+    } catch (e) {
+      console.log(e);
+      yield put(AppAction.SearchSongFailure());
     }
   }
 }

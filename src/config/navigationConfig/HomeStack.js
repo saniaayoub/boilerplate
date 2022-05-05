@@ -1,4 +1,11 @@
-import {AddPost, Home, ImageUpload, Profile, Weather} from '../../containers';
+import {
+  AddPost,
+  Home,
+  ImageUpload,
+  Profile,
+  Weather,
+  Spotify,
+} from '../../containers';
 
 export const HomeStack = [
   {
@@ -25,5 +32,10 @@ export const HomeStack = [
     name: 'Weather',
     component: Weather,
     key: 'Weather',
+  },
+  {
+    name: 'Spotify',
+    component: Spotify,
+    key: 'Spotify',
   },
 ];

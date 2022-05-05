@@ -24,7 +24,7 @@ class Home extends Component {
     this.unsubNavigationEvent = this.props.navigation.addListener(
       'focus',
       () => {
-        this.flatListRef?.scrollToOffset({animated: true, offset: 0});
+        this.f?.scrollToOffset({animated: true, offset: 0});
       },
     );
   }
@@ -49,6 +49,17 @@ class Home extends Component {
           }
           renderItem={RenderItem}
           contentContainerStyle={styles.listContentContainerStyle}
+        />
+        <Button.FloatingButton
+          customStyle={{
+            position: 'absolute',
+            bottom: Metrix.VerticalSize(285),
+            right: Metrix.HorizontalSize(20),
+          }}
+          iconComp={<Icon name="music" color="white" size={18} />}
+          onPress={() => {
+            this.props.navigation.navigate('Spotify');
+          }}
         />
         <Button.FloatingButton
           customStyle={{

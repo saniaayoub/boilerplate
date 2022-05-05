@@ -1,4 +1,3 @@
-
 /* Regex to check email */
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
 
@@ -24,17 +23,19 @@ const phoneNumberRegex = /^(([\+]([\d]{2,}))([0-9\.\-]{8,})|([0-9\.\-\/\s]{8,}))
 /* Check for only numbers */
 const numberRegex = /^[0-9]*$/;
 
-
-const isEmailValid = (email = "") => emailRegex.test(String(email).toLowerCase());
-const isPasswordValid = (password = "") => passwordRegex.test(password);
-const isFullNameValid = (fullName = "") => nameRegex.test(String(fullName).trim().toLocaleLowerCase());
-const isPhoneNumberValid = (phoneNumber = "") => phoneNumberRegex.test(phoneNumber);
+const isEmailValid = (email = '') =>
+  emailRegex.test(String(email).toLowerCase());
+const isPasswordValid = (password = '') => passwordRegex.test(password);
+const isFullNameValid = (fullName = '') =>
+  nameRegex.test(String(fullName).trim().toLocaleLowerCase());
+const isPhoneNumberValid = (phoneNumber = '') =>
+  phoneNumberRegex.test(phoneNumber);
 const isNumber = (number = 0) => numberRegex.test(number);
 
 export default {
-    isEmailValid,
-    isPasswordValid,
-    isFullNameValid,
-    isPhoneNumberValid,
-    isNumber
-}
+  isEmailValid,
+  isPasswordValid,
+  isFullNameValid,
+  isPhoneNumberValid,
+  isNumber,
+};
