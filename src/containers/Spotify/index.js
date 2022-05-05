@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
 } from 'react-native';
+import {WebView} from 'react-native-webview';
 import {useDispatch, useSelector} from 'react-redux';
 import {Button, Forminput, Header} from '../../components';
 import {Metrix, NavigationService, Utils} from '../../config';
@@ -30,7 +31,7 @@ const Spotify = () => {
       dispatch(
         AppAction.SearchSong({
           offset: 2,
-          limit: 2,
+          limit: 20,
           q: song,
           spotify_token: token,
         }),
@@ -39,23 +40,33 @@ const Spotify = () => {
   };
   const songInfo = useSelector(state => state.AppReducer.songs);
   const RenderItem = ({item}) => {
-    console.log(item);
     return (
       <View style={styles.itemView}>
-        <Image
+        {/* <Image
           source={{uri: item.imageUri ? item.imageUri : null}}
           resizeMode={'contain'}
           style={{
             width: Metrix.HorizontalSize(50),
             height: Metrix.HorizontalSize(50),
           }}
+        /> */}
+        <WebView
+          style={{
+            height: Metrix.VerticalSize(90),
+            width: Metrix.HorizontalSize(280),
+          }}
+          source={{uri: 'https://open.spotify.com/embed/track/' + item.id}}
         />
+        {/* 
         <View style={{flexDirection: 'column'}}>
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.bodyText}>{item.artist}</Text>
-        </View>
+        </View> */}
       </View>
     );
+  };
+  const renderEmptyContainer = () => {
+    return <Text style={{color: 'red'}}> No songs found </Text>;
   };
   return (
     <View style={styles.container}>
@@ -67,8 +78,6 @@ const Spotify = () => {
       <View
         style={{
           width: '100%',
-          position: 'absolute',
-          top: Metrix.VerticalSize(150),
         }}>
         <View style={styles.content}>
           <View style={{marginBottom: Metrix.VerticalSize(20)}}>
@@ -82,10 +91,11 @@ const Spotify = () => {
               value={song}
               blurOnSubmit={false}
               errMsg={songErrorMsg}
-              containerStyle={{marginTop: Metrix.VerticalSize(25)}}
             />
           </View>
-          <Button.Standard text="Search" onPress={() => searchMusic()} />
+          <View style={{marginBottom: Metrix.VerticalSize(20)}}>
+            <Button.Standard text="Search" onPress={() => searchMusic()} />
+          </View>
 
           {loader ? (
             <ActivityIndicator />
@@ -98,6 +108,7 @@ const Spotify = () => {
                 }
                 renderItem={item => RenderItem(item)}
                 contentContainerStyle={styles.listContentContainerStyle}
+                ListEmptyComponent={() => renderEmptyContainer}
               />
             </View>
           )}

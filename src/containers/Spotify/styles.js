@@ -7,6 +7,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.Secondary,
   },
   content: {
+    position: 'relative',
+    top: 70,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -15,7 +17,7 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   itemView: {
-    flexDirection: 'row',
+    flexGrow: 1,
     borderRadius: Metrix.Radius,
     marginVertical: 5,
     marginHorizontal: 10,
