@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, PermissionsAndroid} from 'react-native';
 import {connect} from 'react-redux';
 import {Button, Header} from '../../components';
 import {AppAction} from '../../store/actions';
@@ -17,10 +17,14 @@ const RenderItem = ({item}) => {
 };
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+  }
   unsubNavigationEvent = () => {};
 
   componentDidMount() {
     this.props.GetPosts();
+
     this.unsubNavigationEvent = this.props.navigation.addListener(
       'focus',
       () => {
@@ -49,6 +53,17 @@ class Home extends Component {
           }
           renderItem={RenderItem}
           contentContainerStyle={styles.listContentContainerStyle}
+        />
+        <Button.FloatingButton
+          customStyle={{
+            position: 'absolute',
+            bottom: Metrix.VerticalSize(365),
+            right: Metrix.HorizontalSize(20),
+          }}
+          iconComp={<Icon name="map-marker" color="white" size={18} />}
+          onPress={() => {
+            this.props.navigation.navigate('Map');
+          }}
         />
         <Button.FloatingButton
           customStyle={{

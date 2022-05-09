@@ -81,9 +81,6 @@ function mapDispatchToProps(dispatch) {
     AddPost: payload => {
       dispatch(AppAction.AddPost(payload));
     },
-    Logout: () => {
-      dispatch(AppAction.Logout());
-    },
   };
 }
 

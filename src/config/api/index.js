@@ -55,7 +55,7 @@ export default class ApiCaller {
       headers,
     })
       .then(res => {
-        return res.data.access_token;
+        return res;
       })
       .catch(err => err.response);
   };

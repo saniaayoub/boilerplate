@@ -108,7 +108,7 @@ const Spotify = () => {
                 }
                 renderItem={item => RenderItem(item)}
                 contentContainerStyle={styles.listContentContainerStyle}
-                ListEmptyComponent={() => renderEmptyContainer}
+                ListEmptyComponent={() => renderEmptyContainer()}
               />
             </View>
           )}

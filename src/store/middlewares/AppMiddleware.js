@@ -108,18 +108,20 @@ export default class AppMiddleware {
       console.log(`%c${err.name}`, 'color: red', ' => ', err);
     }
   }
+
   static *GetInfo() {
     try {
       const user = yield AsyncStorage.getItem('user');
       const uid = JSON.parse(user).uid;
       const docRef = yield firestore().collection('Users').doc(uid);
       const userData = yield docRef.get();
-      console.log('saga', userData._data);
+      // console.log('saga', userData._data);
       yield put(AppAction.GetInfoSuccess(userData._data));
     } catch (e) {
       console.log('Not Inserted due to Error', e);
     }
   }
+
   static *SendEmail(payload) {
     try {
       yield auth().sendPasswordResetEmail(payload.payload);
@@ -132,13 +134,14 @@ export default class AppMiddleware {
       Alert.alert(e);
     }
   }
+
   static *SaveInfo({payload}) {
     const {name, email, address, phone, state, country, image} = payload;
     console.log(payload);
     try {
       const user = yield AsyncStorage.getItem('user');
       const uid = JSON.parse(user).uid;
-      console.log(uid);
+      // console.log(uid);
       const docRef = yield firestore().collection('Users').doc(uid);
       yield docRef.set({
         name: name,
@@ -155,14 +158,15 @@ export default class AppMiddleware {
       Alert.alert('Not Inserted due to Error', e);
     }
   }
+
   static *ImgUpload({payload}) {
     const {image} = payload;
     try {
       const user = yield AsyncStorage.getItem('user');
       const uid = JSON.parse(user).uid;
       let imageName = uid + '.' + image.split('.').pop();
-      console.log('saga', imageName);
-      console.log(image);
+      // console.log('saga', imageName);
+      // console.log(image);
       const reference = yield storage().ref(imageName);
       yield reference.putFile(image);
       yield put(AppAction.ImgUploadSuccess());
@@ -173,13 +177,14 @@ export default class AppMiddleware {
       Alert.alert('Profile picture not updated');
     }
   }
+
   static *ImgRetrieve() {
     let image = '';
     try {
       const user = yield AsyncStorage.getItem('user');
       const uid = JSON.parse(user).uid;
       let imageName = uid + '.jpg';
-      console.log('saga', imageName);
+      // console.log('saga', imageName);
       const reference = yield storage().ref('/' + imageName);
       image = yield reference.getDownloadURL();
       yield put(AppAction.ImgRetrieveSuccess(image));
@@ -189,6 +194,7 @@ export default class AppMiddleware {
       Alert.alert('Error', e);
     }
   }
+
   static *WeatherCheck({payload}) {
     const {city} = payload;
     const apiKey = 'ca3582fd53c1b38d6d75c4b67b8a3ff2';
@@ -208,6 +214,7 @@ export default class AppMiddleware {
       Alert.alert('Error', e);
     }
   }
+
   static *GetToken() {
     const base64Credentials = base64.encode(client_id + ':' + client_secret);
     try {
@@ -219,13 +226,14 @@ export default class AppMiddleware {
           Content_Type: 'application/x-www-form-urlencoded',
         },
       );
-      console.log(res);
-      yield put(AppAction.GetTokenSuccess(res));
+      console.log('token', res.data.access_token);
+      yield put(AppAction.GetTokenSuccess(res.data.access_token));
     } catch (e) {
       console.log(e);
       yield put(AppAction.GetTokenFailure());
     }
   }
+
   static *SearchSong({payload}) {
     const {offset, limit, q, spotify_token} = payload;
     console.log(offset, limit, q, spotify_token);
@@ -251,7 +259,7 @@ export default class AppMiddleware {
           imageUri: item.album.images ? item.album.images[0].url : undefined,
           trackUri: item.uri,
         }));
-        console.log('songs', songs);
+        // console.log('songs', songs);
         yield put(AppAction.SearchSongSuccess(songs));
       }
     } catch (e) {
