@@ -50,7 +50,7 @@ class Home extends Component {
         />
         <Button.FloatingButton
           onPress={() => {
-            this.props.navigation.navigate('ImageUpload');
+            this.props.navigation.navigate('AddPost');
           }}
         />
       </View>

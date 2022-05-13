@@ -6,14 +6,9 @@ export const HomeStack = [
     component: Home,
     key: 'Home',
   },
-  //   {
-  //     name: 'AddPost',
-  //     component: AddPost,
-  //     key: 'AddPost',
-  //   },
   {
-    name: 'ImageUpload',
-    component: ImageUpload,
-    key: 'ImageUpload',
+    name: 'AddPost',
+    component: AddPost,
+    key: 'AddPost',
   },
 ];
